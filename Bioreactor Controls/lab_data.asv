@@ -1,0 +1,4 @@
+lab_data = struct([]);
+
+lab_data.users = {'Ted, Teb'};
+lab_data.experiments = {'Single Valve', 'Multi Valve'};
