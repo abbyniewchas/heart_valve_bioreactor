@@ -23,27 +23,38 @@ private:
     int max_sampling_freq;
 
 public:
+    // Constructors
+    Sensor();
+
+    Sensor(std::string id, int num_inputs, std::vector<std::string> input_pins, int max_sampling_freq);
+
+    // Copy Constructor
+    Sensor(const Sensor& other);
+
     // Getters - each function returns one of the private members of a Sensor parent object
-    std::string get_id();
+    std::string get_id() const;
 
-    int get_num_inputs();
+    int get_num_inputs() const;
 
-    std::vector<std::string> get_input_pins();
+    std::vector<std::string> get_input_pins() const;
 
-    int get_max_sampling_freq();
+    int get_max_sampling_freq() const;
 
     // Setters - each function sets one of the private members of a Sensor parent object
-    std::string set_id();
+    void set_id(std::string id);
 
-    int set_num_inputs();
+    void set_num_inputs(int num_inputs);
 
-    std::vector<std::string> set_input_pins();
+    void set_input_pins(std::vector<std::string> input_pins);
 
-    int set_max_sampling_freq();
+    void set_max_sampling_freq(int max_sampling_freq);
 
     // Main Sensor functions
     // Get sensor's current value
-    virtual int get_values() = 0;
+    virtual int[] get_values() = 0;
+
+    // Destructor
+    ~Sensor();
 };
 
 #endif //HEART_VALVE_BIOREACTOR_BIOREACTOR_SENSOR_HPP
