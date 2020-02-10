@@ -51,7 +51,10 @@ public:
 
     // Main Sensor functions
     // Get sensor's current value
-    virtual int[] get_values() = 0;
+    virtual int* get_values() = 0;
+
+    // Start sensor with any initializations needed
+    virtual void sensor_begin() = 0;
 
     // Destructor
     ~Sensor();
