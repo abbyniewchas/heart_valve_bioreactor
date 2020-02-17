@@ -1,5 +1,4 @@
-#include <SparkFun_MS5803_I2C.h>
-#include <Wire.h>
+
 
 /*
 #include <GSM3SoftSerial.h>
@@ -49,15 +48,12 @@
 
 
 /*
-J.Teda 21/04/2013
-
-Exsample of how to run Dynamixel in SERVO mode - tell servo what angle to move to.
-
-Robotis e-Manual ( http://support.robotis.com )
- 
+ * Combined example code from Dynamixel Serial and Sparkfun
 */
 
 #include <Dynamixel_Serial.h>       // Library needed to control Dynamixal servo
+#include <SparkFun_MS5803_I2C.h>
+#include <Wire.h>
 
 #define SERVO_ID 0x01               // ID of which we will set Dynamixel too 
 #define SERVO_ControlPin 0x02       // Control pin of buffer chip, NOTE: this does not matter becasue we are not using a half to full contorl buffer.
@@ -79,10 +75,6 @@ double base_altitude = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in (
 void setup(){
  delay(1000);                                                           // Give time for Dynamixel to start on power-up
 
-//Dynamixel.begin(SERVO_SET_Baudrate, SERVO_ControlPin);        			// We now need to set Ardiuno to the new Baudrate speed 
-//Dynamixel.setMode(SERVO_ID, SERVO, CW_LIMIT_ANGLE, CCW_LIMIT_ANGLE);    // set mode to SERVO and set angle limits
-//Serial.begin(9600);
-
  // Now that the Dynamixel is reset to factory setting we will program its Baudrate and ID
  Dynamixel.begin(57600,SERVO_ControlPin);                 // Set Ardiuno Serial speed to factory default speed of 57600
  Dynamixel.setID(0xFE,SERVO_ID);                               // Broadcast to all Dynamixel IDs(0xFE) and set with new ID
@@ -102,7 +94,7 @@ void setup(){
  * Sparkfun
  */
     // Start your preferred I2C object
-  Wire.begin();
+    Wire.begin();
   //Initialize Serial Monitor
   //Serial.begin(9600);
   //Retrieve calibration constants for conversion math.
@@ -110,6 +102,27 @@ void setup(){
   sensor.begin();
 
   pressure_baseline = sensor.getPressure(ADC_4096);
+
+  /*
+   * Data Logging
+   * you may use Putty:
+
+1. install putty:
+sudo apt-get install putty putty-tools
+
+2. run Putty. It should be inside the internet apps (I don't know why)
+
+http://imgur.com/a/Dx695
+
+3. in Putty select serial and specify the right port:
+
+http://imgur.com/a/ecNqn
+
+4. then on the left  under session go to the logging. select the printable output. and then specify the right address and file name for the output file:
+
+http://imgur.com/a/OLL7q
+   */
+
 }
 
 
@@ -118,7 +131,6 @@ int digitalIn = 4;
 int val = 0;
 int servo_write = 0;
 int time_ms = 0;
-bool first_run = true;
 int start_time = 0;
 
 void loop(){
@@ -134,10 +146,9 @@ void loop(){
 
 
   /*
-   * Send linear function to pump
+   * Send linear movement function to pump
    */
   // Reset pump
-  
   if (digitalRead(digitalIn) == LOW) {
     Dynamixel.servo(SERVO_ID,2002,0x3FF);
     delayMicroseconds(1);
@@ -145,36 +156,14 @@ void loop(){
   } else {
     //Start: servo_write = 2000;
     //End: servo_write = 1000;
-  
     time_ms = ((int) millis()) - start_time;
     servo_write = (-1000 * (time_ms / 1000.0)) + 2000;
     servo_write = max(min(servo_write, 2000), 1000);
-    //Serial.println(time_ms);
     Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
 
     // Read pressure from the sensor in mbar.
     pressure_abs = sensor.getPressure(ADC_4096);
-    //Serial.println(pressure_abs);
 
     File file = fopen()
   }
-  
-  
-
-  
-  /*
-  //Serial.println(val);
-  delay(4000); 
-
-  Dynamixel.servo(SERVO_ID,0x001,0x3FF);   // Move servo to angle 1(0.088 degree) at speed 100
-  //delayMicroseconds(1);
-  
-  //delay(1000);
-  delay(4000); 
-  
-  Dynamixel.servo(SERVO_ID,0xFFF,0x3FF);  //  Move servo to max angle at max speed 
-  //Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
-  //delay(4000);
-  */
-  
 }
