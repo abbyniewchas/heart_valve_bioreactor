@@ -54,10 +54,12 @@
 #include <Dynamixel_Serial.h>       // Library needed to control Dynamixal servo
 #include <SparkFun_MS5803_I2C.h>
 #include <Wire.h>
+//#include <SoftwareSerial.h>
 
 #define SERVO_ID 0x01               // ID of which we will set Dynamixel too 
 #define SERVO_ControlPin 0x02       // Control pin of buffer chip, NOTE: this does not matter becasue we are not using a half to full contorl buffer.
-#define SERVO_SET_Baudrate 100000    // Baud rate speed which the Dynamixel will be set too (57600)
+//#define SERVO_SET_Baudrate 100000    // Baud rate speed which the Dynamixel will be set too (57600)
+#define SERVO_SET_Baudrate 9600    // Baud rate speed which the Dynamixel will be set too (57600)
 #define CW_LIMIT_ANGLE 0x001        // lowest clockwise angle is 1, as when set to 0 it set servo to wheel mode
 #define CCW_LIMIT_ANGLE 0xFFF       // Highest anit-clockwise angle is 0XFFF, as when set to 0 it set servo to wheel mode
 
@@ -72,11 +74,15 @@ float temperature_c, temperature_f;
 double pressure_abs, pressure_relative, altitude_delta, pressure_baseline;
 double base_altitude = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in (m)
 
+//SoftwareSerial portSensor(3, 4);
+
+
 void setup(){
  delay(1000);                                                           // Give time for Dynamixel to start on power-up
 
  // Now that the Dynamixel is reset to factory setting we will program its Baudrate and ID
- Dynamixel.begin(57600,SERVO_ControlPin);                 // Set Ardiuno Serial speed to factory default speed of 57600
+ //Dynamixel.begin(57600,SERVO_ControlPin);                 // Set Ardiuno Serial speed to factory default speed of 57600
+ Dynamixel.begin(9600,SERVO_ControlPin);
  Dynamixel.setID(0xFE,SERVO_ID);                               // Broadcast to all Dynamixel IDs(0xFE) and set with new ID
  delay(10);                                                     // Time needed for Dynamixel to set it's new ID before next instruction can be sent
  Dynamixel.setStatusPaket(SERVO_ID,READ);                      // Tell Dynamixel to only return status packets when a "read" instruction is sent e.g. Dynamixel.readVoltage();
@@ -93,6 +99,7 @@ void setup(){
 /*
  * Sparkfun
  */
+
     // Start your preferred I2C object
     Wire.begin();
   //Initialize Serial Monitor
@@ -102,6 +109,7 @@ void setup(){
   sensor.begin();
 
   pressure_baseline = sensor.getPressure(ADC_4096);
+  //portSensor.begin(9600);
 
   /*
    * Data Logging
@@ -123,6 +131,8 @@ http://imgur.com/a/ecNqn
 http://imgur.com/a/OLL7q
    */
 
+  //Serial.begin(9600);
+
 }
 
 
@@ -132,6 +142,9 @@ int val = 0;
 int servo_write = 0;
 int time_ms = 0;
 int start_time = 0;
+int sensor_collect_freq = 200;
+int time_since_last_data = 0;
+int sensor_time_zero = 0;
 
 void loop(){
 
@@ -148,22 +161,42 @@ void loop(){
   /*
    * Send linear movement function to pump
    */
+    //portSensor.listen();
+
+   
   // Reset pump
   if (digitalRead(digitalIn) == LOW) {
-    Dynamixel.servo(SERVO_ID,2002,0x3FF);
-    delayMicroseconds(1);
+    Dynamixel.servo(SERVO_ID,2500,0x3FF);
     start_time = (int) millis();
+    time_ms = 0;
+    servo_write = 0;
   } else {
-    //Start: servo_write = 2000;
-    //End: servo_write = 1000;
+    //Start: servo_write = 2500;
+    //End: servo_write = 1500;
     time_ms = ((int) millis()) - start_time;
-    servo_write = (-1000 * (time_ms / 1000.0)) + 2000;
-    servo_write = max(min(servo_write, 2000), 1000);
+    servo_write = (-1000 * (time_ms / 1000.0)) + 2500;
+    servo_write = max(min(servo_write, 2500), 1500);
     Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
 
-    // Read pressure from the sensor in mbar.
-    pressure_abs = sensor.getPressure(ADC_4096);
+    //portSensor.println(pressure_abs);
 
-    File file = fopen()
+    /*
+    time_since_last_data = ((int) millis()) - sensor_time_zero;
+    if (time_since_last_data >= sensor_collect_freq) {
+      pressure_abs = sensor.getPressure(ADC_4096);
+      Serial.println(pressure_abs);
+      sensor_time_zero = (int) millis();
+    }
+    */
   }
+
+  //delay(1);
+  pressure_abs = sensor.getPressure(ADC_4096);
+  Serial.print(time_ms);
+  Serial.print(", ");
+  Serial.print(servo_write);
+  Serial.print(", ");
+  Serial.print(pressure_abs);
+  Serial.print("\n");
+  
 }
