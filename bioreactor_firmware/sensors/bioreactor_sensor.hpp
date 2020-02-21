@@ -5,11 +5,14 @@
 #ifndef HEART_VALVE_BIOREACTOR_BIOREACTOR_SENSOR_HPP
 #define HEART_VALVE_BIOREACTOR_BIOREACTOR_SENSOR_HPP
 
-#define DEFAULT_SAMPLING_FREQUENCY = 1000;
+#include <string>
+#include <vector>
+
+#define DEFAULT_SAMPLING_FREQUENCY 1000
 
 // Overarching parent sensor class for all sensors to be derived from
 class Sensor {
-private:
+protected:
     // Sensor id
     std::string id;
 
@@ -17,7 +20,7 @@ private:
     int num_inputs;
 
     // Input pins for sensor (eg. {'A0', 'A1', 'A2', ...})
-    std::vector<std::string> input_pins;
+    std::string input_pins[];
 
     // Sensor max sampling frequency [Hz]
     int max_sampling_freq;
@@ -26,17 +29,17 @@ public:
     // Constructors
     Sensor();
 
-    Sensor(std::string id, int num_inputs, std::vector<std::string> input_pins, int max_sampling_freq);
+    Sensor(std::string id, int num_inputs, std::string input_pins, int max_sampling_freq);
 
     // Copy Constructor
     Sensor(const Sensor& other);
-
+/*
     // Getters - each function returns one of the private members of a Sensor parent object
     std::string get_id() const;
 
     int get_num_inputs() const;
 
-    std::vector<std::string> get_input_pins() const;
+    std::string get_input_pins() const;
 
     int get_max_sampling_freq() const;
 
@@ -45,16 +48,19 @@ public:
 
     void set_num_inputs(int num_inputs);
 
-    void set_input_pins(std::vector<std::string> input_pins);
+    void set_input_pins(std::string input_pins);
 
     void set_max_sampling_freq(int max_sampling_freq);
-
+*/
     // Main Sensor functions
     // Get sensor's current value
     virtual int* get_values() = 0;
 
     // Start sensor with any initializations needed
     virtual void sensor_begin() = 0;
+
+    // Print sensor parameters
+    void sensor_param() const;
 
     // Destructor
     ~Sensor();

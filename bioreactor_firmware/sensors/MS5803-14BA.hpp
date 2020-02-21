@@ -13,7 +13,7 @@
  * This class is a wrapper for Sparkfun's external lib of the MS5803.
  * this is done to get their sensor code to fit in our defined architecture.
  */
-class MS5803_14BA : public Sensor{
+class MS5803_14BA : public Sensor {
 private:
     // Constructor will create an object of sparkfun's sensor class
     MS5803* sparkfun_MS5803;
