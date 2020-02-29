@@ -1,5 +1,5 @@
 //
-// Created by lutkus on 2/19/20.
+// Created by lutkus on 2/19/20
 //
 
 #include "bioreactor_firmware.h"
@@ -77,6 +77,29 @@ void PID::reset_integral() {
  * State Machine
  */
 
+
 /*
  * Data Logger
  */
+DataLogger::DataLogger() {
+    this->num_sensors = 0;
+}
+
+DataLogger::DataLogger(char* filename, int num_sensors) {
+    this->file.open(filename);
+    this->num_sensors = num_sensors;
+}
+
+void DataLogger::open_file(char* filename) {
+    this->file.open(filename);
+}
+
+void DataLogger::save_data(float *data) {
+    for (int i = 0; i < this->num_sensors; i++){
+        this->file << data[i] << ", ";
+    }
+}
+
+DataLogger::~DataLogger() {
+    this->file.close();
+}

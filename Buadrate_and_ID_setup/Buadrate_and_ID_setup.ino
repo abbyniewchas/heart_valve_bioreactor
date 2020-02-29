@@ -43,6 +43,9 @@ void setup(){
         delay(5);
          
  } 
+ Dynamixel.begin(9600, SERVO_ControlPin);
+ Dynamixel.reset(0xFE);
+ delay(5);
  digitalWrite(LED13, LOW);
  
  delay(3000);                                                 // Give time for Dynamixel to reset
@@ -63,6 +66,7 @@ void setup(){
   Dynamixel.setMode(SERVO_ID, SERVO,0x000,0xFFF);              // Turn mode to SERVO, must be WHEEL if using wheel mode
   delay(5);
   Dynamixel.setMaxTorque(SERVO_ID, 0x2FF);                     // Set Dynamixel to max torque limit
+  //Dynamixel.setHoldingTorque(SERVO_ID, false);
 }
 
 

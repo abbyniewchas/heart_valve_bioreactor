@@ -66,14 +66,15 @@
 /*
  * Sparkfun sensor
  */
- 
+
+ /*
 MS5803 sensor(ADDRESS_HIGH);
 
 //Create variables to store results
 float temperature_c, temperature_f;
 double pressure_abs, pressure_relative, altitude_delta, pressure_baseline;
 double base_altitude = 1655.0; // Altitude of SparkFun's HQ in Boulder, CO. in (m)
-
+*/
 //SoftwareSerial portSensor(3, 4);
 
 
@@ -82,12 +83,12 @@ void setup(){
 
  // Now that the Dynamixel is reset to factory setting we will program its Baudrate and ID
  //Dynamixel.begin(57600,SERVO_ControlPin);                 // Set Ardiuno Serial speed to factory default speed of 57600
- Dynamixel.begin(9600,SERVO_ControlPin);
- Dynamixel.setID(0xFE,SERVO_ID);                               // Broadcast to all Dynamixel IDs(0xFE) and set with new ID
- delay(10);                                                     // Time needed for Dynamixel to set it's new ID before next instruction can be sent
- Dynamixel.setStatusPaket(SERVO_ID,READ);                      // Tell Dynamixel to only return status packets when a "read" instruction is sent e.g. Dynamixel.readVoltage();
- Dynamixel.setBaudRate(SERVO_ID,SERVO_SET_Baudrate);           // Set Dynamixel to new serial speed 
- delay(30);                                                    // Time needed for Dynamixel to set it's new Baudrate
+ //Dynamixel.begin(9600,SERVO_ControlPin);
+ //Dynamixel.setID(0xFE,SERVO_ID);                               // Broadcast to all Dynamixel IDs(0xFE) and set with new ID
+ //delay(10);                                                     // Time needed for Dynamixel to set it's new ID before next instruction can be sent
+ //Dynamixel.setStatusPaket(SERVO_ID,READ);                      // Tell Dynamixel to only return status packets when a "read" instruction is sent e.g. Dynamixel.readVoltage();
+ //Dynamixel.setBaudRate(SERVO_ID,SERVO_SET_Baudrate);           // Set Dynamixel to new serial speed 
+ //delay(30);                                                    // Time needed for Dynamixel to set it's new Baudrate
 
 
   Dynamixel.begin(SERVO_SET_Baudrate,SERVO_ControlPin);    // We now need to set Ardiuno to the new Baudrate speed 
@@ -99,7 +100,7 @@ void setup(){
 /*
  * Sparkfun
  */
-
+/*
     // Start your preferred I2C object
     Wire.begin();
   //Initialize Serial Monitor
@@ -110,7 +111,7 @@ void setup(){
 
   pressure_baseline = sensor.getPressure(ADC_4096);
   //portSensor.begin(9600);
-
+*/
   /*
    * Data Logging
    * you may use Putty:
@@ -131,7 +132,7 @@ http://imgur.com/a/ecNqn
 http://imgur.com/a/OLL7q
    */
 
-  //Serial.begin(9600);
+  Serial.begin(9600);
 
 }
 
@@ -151,16 +152,34 @@ void loop(){
   /*
    * Move pump manually with potentiometer
    */
+   /*
+  val = analogRead(analogPin);
+  servo_write = (int) ((val / 1023.0) * 4095.0);
+  delayMicroseconds(1);
+  Dynamixel.servo(SERVO_ID,servo_write,0x100);
+  delayMicroseconds(1);
+  */
+
+   /*
+   * Move pump with fixed start and stop but change the torque limit
+   */
+  
   //val = analogRead(analogPin);
-  //servo_write = (int) ((val / 1023.0) * 4095.0);
+  //int servo_max_torque = (int) ((val / 1023.0) * 4095.0);
+  //int servo_max_torque = 1023;
+  //Dynamixel.setMaxTorque(SERVO_ID, servo_max_torque);
   //delayMicroseconds(1);
-  //Dynamixel.servo(SERVO_ID,servo_write,0x100);
-  //delayMicroseconds(1);
+  //Dynamixel.setHoldingTorque(SERVO_ID, true);
+  delay(2000);
+  Dynamixel.servo(SERVO_ID,2500,0x100);
+  delay(2000);
+  Dynamixel.servo(SERVO_ID,1500,0x100);
 
 
   /*
    * Send linear movement function to pump
    */
+   /*
     //portSensor.listen();
 
    
@@ -179,6 +198,7 @@ void loop(){
     Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
 
     //portSensor.println(pressure_abs);
+    */
 
     /*
     time_since_last_data = ((int) millis()) - sensor_time_zero;
@@ -187,9 +207,9 @@ void loop(){
       Serial.println(pressure_abs);
       sensor_time_zero = (int) millis();
     }
-    */
+    
   }
-
+/*
   //delay(1);
   pressure_abs = sensor.getPressure(ADC_4096);
   Serial.print(time_ms);
@@ -198,5 +218,6 @@ void loop(){
   Serial.print(", ");
   Serial.print(pressure_abs);
   Serial.print("\n");
+  */
   
 }

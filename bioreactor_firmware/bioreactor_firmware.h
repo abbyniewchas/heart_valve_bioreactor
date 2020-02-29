@@ -20,6 +20,8 @@
 
 //#include "Arduino.h"
 #include <string>
+#include <fstream>
+#include <iostream>
 
 /*
  * Controllers
@@ -94,7 +96,33 @@ public:
 
 class StateMachine {
 private:
+    int state_flag;
 public:
+    // Getter and setter for state
+    int get_state();
+    void set_state(int state_flag);
+
+    // Print state
+    std::string print_state();
+
+    /*
+     * States:
+     *  System:
+     *      Startup
+     *      Compliance Calibration
+     *      Running
+     *      Paused
+     *      Media Exchange
+     *      Terminating Experiment
+     *
+     *  While Running:
+     *      Forward_pressure
+     *      Back_pressure
+     *      Rest
+     *
+     */
+
+
 };
 
 /*
@@ -103,7 +131,14 @@ public:
 
 class DataLogger {
 private:
+    std::ofstream file;
+    int num_sensors;
 public:
+    DataLogger();
+    DataLogger(char* filename, int num_sensors);
+    void open_file(char* filename);
+    void save_data(float *data);
+    ~DataLogger();
 };
 
 #endif //HEART_VALVE_BIOREACTOR_BIOREACTOR_FIRMWARE_H

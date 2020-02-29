@@ -12,7 +12,15 @@ int main() {
     float PID_values2[3] = {5, 4, 3};
     pid.tune_controller(PID_values);
 
+    char* filename = "my_file_test.csv";
+    DataLogger datalogger(filename);
+
     std::cout << pid.control_action(41.2, 41.0, 0.02) << std::endl;
+
+    float data[] = {2.4, 3.1, 5.8};
+    for (int i = 0; i < 10; i++) {
+        datalogger.save_data(data);
+    }
 
     return 0;
 }
