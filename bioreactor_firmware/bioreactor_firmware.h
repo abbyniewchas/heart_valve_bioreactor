@@ -131,13 +131,25 @@ public:
 
 class DataLogger {
 private:
+    // File that will be written to
     std::ofstream file;
+
+    // Number of sensors
     int num_sensors;
 public:
+    // DataLogger constructor
     DataLogger();
-    DataLogger(char* filename, int num_sensors);
-    void open_file(char* filename);
+
+    // Parametrized constructor
+    DataLogger(std::string filename, int num_sensors);
+
+    // Open file to write data to
+    void open_file(std::string filename);
+
+    // Save data to the opened file
     void save_data(float *data);
+
+    // Destruct DataLogger and close file
     ~DataLogger();
 };
 

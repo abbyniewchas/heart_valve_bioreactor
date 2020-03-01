@@ -12,8 +12,9 @@ int main() {
     float PID_values2[3] = {5, 4, 3};
     pid.tune_controller(PID_values);
 
-    char* filename = "my_file_test.csv";
-    DataLogger datalogger(filename);
+    std::string filename = "my_file_test.csv";
+    int num_sensors = 3;
+    DataLogger datalogger(filename, num_sensors);
 
     std::cout << pid.control_action(41.2, 41.0, 0.02) << std::endl;
 

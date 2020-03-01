@@ -81,25 +81,32 @@ void PID::reset_integral() {
 /*
  * Data Logger
  */
+
+// DataLogger constructor
 DataLogger::DataLogger() {
     this->num_sensors = 0;
 }
 
-DataLogger::DataLogger(char* filename, int num_sensors) {
-    this->file.open(filename);
+// Parametrized constructor
+DataLogger::DataLogger(std::string filename, int num_sensors) {
+    this->file.open(filename.c_str());
     this->num_sensors = num_sensors;
 }
 
-void DataLogger::open_file(char* filename) {
-    this->file.open(filename);
+// Open file to write data to
+void DataLogger::open_file(std::string filename) {
+    this->file.open(filename.c_str());
 }
 
+// Save data to the opened file
 void DataLogger::save_data(float *data) {
     for (int i = 0; i < this->num_sensors; i++){
         this->file << data[i] << ", ";
     }
+    this->file << "\n";
 }
 
+// Destruct DataLogger and close file
 DataLogger::~DataLogger() {
     this->file.close();
 }
