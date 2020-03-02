@@ -23,5 +23,8 @@ int main() {
         datalogger.save_data(data);
     }
 
+    StateMachine s1;
+    s1.state_transition(CALIBRATION);
+
     return 0;
 }

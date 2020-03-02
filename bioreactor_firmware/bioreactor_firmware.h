@@ -22,6 +22,15 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <vector>
+
+// Define state machine states
+#define STARTUP 0
+#define CALIBRATION 1
+#define RUNNING 2
+#define PAUSED 3
+#define MEDIA_EXCHANGE 4
+#define EXPERIMENT_TERMINATION 5
 
 /*
  * Controllers
@@ -96,11 +105,11 @@ public:
 
 class StateMachine {
 private:
-    int state_flag;
+    int state;
+    int** s;
 public:
-    // Getter and setter for state
-    int get_state();
-    void set_state(int state_flag);
+    // Initialize state machine
+    StateMachine();
 
     // Print state
     std::string print_state();
@@ -122,6 +131,10 @@ public:
      *
      */
 
+    void state_transition(int new_state);
+
+    // Destruct state machine
+    ~StateMachine();
 
 };
 

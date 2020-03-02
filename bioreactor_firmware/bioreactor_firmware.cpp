@@ -77,6 +77,60 @@ void PID::reset_integral() {
  * State Machine
  */
 
+// Initialize state machine, should be done once at beginning of bioreactor experiment
+StateMachine::StateMachine() {
+    this->state = STARTUP;
+
+    const int num_states = 6;
+
+    // Initialize transition matrix as a 2D matrix using a pointer to array of pointers
+    this->s = new int*[num_states];
+    for (int i = 0; i < num_states; i++) {
+        this->s[i] = new int[num_states];
+    }
+
+    // Setup transition matrix with unique value for each (state -> new_state) transition
+    int unique_val = 0;
+    for (int i = 0; i < num_states; i++){
+        for (int j = 0; j < num_states; j++) {
+            this->s[i][j] = unique_val;
+            unique_val += 1;
+        }
+    }
+}
+
+std::string StateMachine::print_state() {
+    std::cout << "Current state: " << this->state;
+}
+
+void StateMachine::state_transition(int new_state) {
+
+    // Get transition from current state to new state
+    int trans = this->s[this->state][new_state];
+
+    // Run code depending on transition being made
+    // Startup -> new_state
+    if (trans == this->s[STARTUP][CALIBRATION]) {
+        std::cout << "test_startup->calib\n";
+    }
+    else if (trans == this->s[STARTUP][RUNNING]) {
+        std::cout << "test_startup->running\n";
+    }
+
+    // Calibration -> new_state
+    else if (trans == this->s[CALIBRATION][RUNNING]) {
+
+    }
+
+    /*
+     * TODO : finish transitions
+     */
+}
+
+StateMachine::~StateMachine() {
+    delete this->s;
+}
+
 
 /*
  * Data Logger
