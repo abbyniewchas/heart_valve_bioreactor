@@ -1,0 +1,8 @@
+% https://www.mathworks.com/matlabcentral/fileexchange/51037-zcshiner-dynamixel-mx64-matlab
+% https://www.mathworks.com/help/matlab/ref/serialport.read.html
+% http://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/library_setup/matlab_linux/#matlab-linux
+%% Read value from Arduino serial port and send position command
+
+COM_port = 31;
+baud = 
+Dynamixel = MX64(31,1000000);

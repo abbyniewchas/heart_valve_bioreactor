@@ -110,7 +110,8 @@ void StateMachine::state_transition(int new_state) {
 
     // Run code depending on transition being made
     // Startup -> new_state
-    if (trans == this->s[STARTUP][CALIBRATION]) {
+    if (trans == this->s[STARTUP][CALIBR
+    ATION]) {
         std::cout << "test_startup->calib\n";
     }
     else if (trans == this->s[STARTUP][RUNNING]) {
