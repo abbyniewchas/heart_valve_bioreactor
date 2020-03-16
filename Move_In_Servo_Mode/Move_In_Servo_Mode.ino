@@ -58,9 +58,9 @@
 
 #define SERVO_ID 0x01               // ID of which we will set Dynamixel too 
 #define SERVO_ControlPin 0x02       // Control pin of buffer chip, NOTE: this does not matter becasue we are not using a half to full contorl buffer.
-//#define SERVO_SET_Baudrate 100000    // Baud rate speed which the Dynamixel will be set too (57600)
+#define SERVO_SET_Baudrate 1000000    // Baud rate speed which the Dynamixel will be set too (57600)
 //#define SERVO_SET_Baudrate 9600    // Baud rate speed which the Dynamixel will be set too (57600)
-#define SERVO_SET_Baudrate 57600    // Baud rate speed which the Dynamixel will be set too (57600)
+//#define SERVO_SET_Baudrate 57600    // Baud rate speed which the Dynamixel will be set too (57600)
 #define CW_LIMIT_ANGLE 0x001        // lowest clockwise angle is 1, as when set to 0 it set servo to wheel mode
 #define CCW_LIMIT_ANGLE 0xFFF       // Highest anit-clockwise angle is 0XFFF, as when set to 0 it set servo to wheel mode
 
@@ -70,7 +70,7 @@
 
 
 MS5803 sensor_p1(ADDRESS_HIGH);
-MS5803 sensor_p2(ADDRESS_LOW);
+//MS5803 sensor_p2(ADDRESS_LOW);
 
 //Create variables to store results
 float temperature_c, temperature_f;
@@ -111,10 +111,10 @@ void setup(){
   //Serial.begin(9600);
   //Retrieve calibration constants for conversion math.
   sensor_p1.reset();
-  sensor_p2.reset();
+  //sensor_p2.reset();
   
   sensor_p1.begin();
-  sensor_p2.begin();
+  //sensor_p2.begin();
 
   //pressure_baseline = sensor_p1.getPressure(ADC_4096);
   //pressure_baseline = sensor_p2.getPressure(ADC_4096);
@@ -142,8 +142,8 @@ http://imgur.com/a/OLL7q
    */
 
   //Serial.begin(9600);
-  Serial.begin(57600);
-
+  //Serial.begin(57600);
+  Serial.begin(1000000);
 
 }
 
@@ -195,30 +195,64 @@ void loop(){
 
    
   // Reset pump
-  /*
-  if (digitalRead(digitalIn) == LOW) {
-    Dynamixel.servo(SERVO_ID,2500,0x3FF);
+  if (digitalRead(digitalIn) == LOW) {// || servo_write == 700) {
+    Dynamixel.servo(SERVO_ID,1200,0x3FF);
     start_time = (int) millis();
     time_ms = 0;
-    servo_write = 0;
+    if (digitalRead(digitalIn) == LOW) {
+      servo_write = 0;
+    }
   } else {
-    //Start: servo_write = 2500;
-    //End: servo_write = 2000;
+    //Start: servo_write = 1200;
+    //End: servo_write = 700;
     time_ms = ((int) millis()) - start_time;
-    servo_write = (-2000 * (time_ms / 1000.0)) + 2500;
-    servo_write = max(min(servo_write, 2500), 2000);
+    servo_write = (-1000 * (time_ms / 1000.0)) + 1200;
+    servo_write = max(min(servo_write, 1200), 700);
     Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
 
     
     // Reset pump once goal position hit
-    if (servo_write == 2000) {
-      Dynamixel.servo(SERVO_ID,2500,0x3FF);
-      delay(500);
+    /*
+    if (servo_write == 700) {
+
+      time_ms = 0;
+      start_time = (int) millis();
+      
+      while (servo_write < 1200) {
+        time_ms = ((int) millis()) - start_time;
+        
+        servo_write = (1000 * (time_ms / 1000.0)) + 700;
+        servo_write = max(min(servo_write, 1200), 700);
+        Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
+        
+        pressure_abs_p1 = sensor_p1.getPressure(ADC_4096);
+        Serial.print(time_ms);
+        Serial.print(", ");
+        Serial.print(servo_write);
+        Serial.print(", ");
+        Serial.print(pressure_abs_p1);
+        Serial.print(", ");
+        Serial.print("\n");
+      }
+      //delay(500);
       time_ms = 0;
       start_time = (int) millis();
       servo_write = 0;
     }
+    */
     
+
+    // Reset pump
+    /*
+    if (servo_write == 700) {
+    write
+    delay
+          time_ms = 0;
+      start_time = (int) millis();
+      servo_write = 0;
+    }
+    
+    */
     
 
     /*
@@ -239,11 +273,11 @@ void loop(){
     }
     */
     
-  //}
+  }
   
   //delay(1);
   pressure_abs_p1 = sensor_p1.getPressure(ADC_4096);
-  pressure_abs_p2 = sensor_p2.getPressure(ADC_4096);
+  //pressure_abs_p2 = sensor_p2.getPressure(ADC_4096);
 
   Serial.print(time_ms);
   Serial.print(", ");
@@ -251,7 +285,7 @@ void loop(){
   Serial.print(", ");
   Serial.print(pressure_abs_p1);
   Serial.print(", ");
-  Serial.print(pressure_abs_p2);
-  Serial.print(", ");
+  //Serial.print(pressure_abs_p2);
+  //Serial.print(", ");
   Serial.print("\n");
 }

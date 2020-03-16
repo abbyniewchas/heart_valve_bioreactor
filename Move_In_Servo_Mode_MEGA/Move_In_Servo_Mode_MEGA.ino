@@ -200,7 +200,7 @@ void loop(){
 
    
   // Reset pump
-  /*
+  
   if (digitalRead(digitalIn) == LOW) {
     Dynamixel.servo(SERVO_ID,2500,0x3FF);
     start_time = (int) millis();
@@ -210,12 +210,13 @@ void loop(){
     //Start: servo_write = 2500;
     //End: servo_write = 2000;
     time_ms = ((int) millis()) - start_time;
-    servo_write = (-2000 * (time_ms / 1000.0)) + 2500;
+    servo_write = (-1000 * (time_ms / 1000.0)) + 2500;
     servo_write = max(min(servo_write, 2500), 2000);
     Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
 
     
     // Reset pump once goal position hit
+    /*
     if (servo_write == 2000) {
       Dynamixel.servo(SERVO_ID,2500,0x3FF);
       delay(500);
@@ -223,6 +224,7 @@ void loop(){
       start_time = (int) millis();
       servo_write = 0;
     }
+    */
     
     
 
@@ -244,9 +246,9 @@ void loop(){
     }
     */
     
-  //}
+  }
 
-  Dynamixel.servo(SERVO_ID,2500,0x3FF);
+  //Dynamixel.servo(SERVO_ID,2500,0x3FF);
   //delay(1);
   pressure_abs_p1 = sensor_p1.getPressure(ADC_4096);
   pressure_abs_p2 = sensor_p2.getPressure(ADC_4096);
@@ -271,6 +273,7 @@ void loop(){
   Serial.print(", ");
   Serial.print(pressure_abs_p2);
   Serial.print(", ");
+  //Serial.print(digitalRead(digitalIn));
   Serial.print("\n");
   
 }
