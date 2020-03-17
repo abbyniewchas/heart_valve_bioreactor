@@ -220,8 +220,20 @@ void loop(){
       
       while (servo_write < 1200) {
         time_ms = ((int) millis()) - start_time;
+
+        while (time_ms < 1000) {
+          pressure_abs_p1 = sensor_p1.getPressure(ADC_4096);
+          Serial.print(time_ms);
+          Serial.print(", ");
+          Serial.print(servo_write);
+          Serial.print(", ");
+          Serial.print(pressure_abs_p1);
+          Serial.print(", ");
+          Serial.print("\n");
+          time_ms = ((int) millis()) - start_time;
+        }
         
-        servo_write = (1000 * (time_ms / 1000.0)) + 700;
+        servo_write = (500 * (time_ms / 1000.0)) + 700;
         servo_write = max(min(servo_write, 1200), 700);
         Dynamixel.servo(SERVO_ID,servo_write,0x3FF);
         

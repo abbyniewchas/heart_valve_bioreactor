@@ -31,13 +31,14 @@ figure;
 %plot(pressure(1:end)*0.750062 - 766 - 21, '-o');
 
 % Baseline pressure
-baseline = 28.3510;
+baseline = 31.6768;
 %pressure_plot = pressure;
 pressure_plot = pressure(pressure > -5);
+pressure_plot = pressure_plot(pressure_plot < 2000);
 plot(pressure_plot(1:end) - baseline, '-o');
 
 %LOW PRESSURE: pressure*0.750062 - 766 - 21
 %% Save data
 % naming: ring - wave - valve - version
 % all displacement = 500 servo increments
-writematrix(pressure, 'black_sine1hz_CV_2010_almost.csv');
+writematrix(pressure, 'pushin_p1.csv');
