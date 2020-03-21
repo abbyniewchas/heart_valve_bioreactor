@@ -1,5 +1,5 @@
-#include <Dynamixel_Serial.h>       // Library needed to control Dynamixal servo
-#include <SparkFun_MS5803_I2C.h>
+#include "Dynamixel_Serial.h"       // Library needed to control Dynamixal servo
+#include "SparkFun_MS5803_I2C.h"
 #include <Wire.h>
 
 // ID of Dynamixel Servo
