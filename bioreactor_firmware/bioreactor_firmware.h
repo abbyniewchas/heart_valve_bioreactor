@@ -89,8 +89,11 @@ public:
 class LQR : public Controller {
 private:
     // K matrix for LQR controller
-    int *K;
+    float *K;
+
 public:
+    LQR(std::string id);
+
     // Tune the controller
     void tune_controller(float tuning_values[]);
 
@@ -102,7 +105,6 @@ public:
  * State Machine
  */
 // for controllers need to handle (dt) being zero
-
 class StateMachine {
 private:
     int state;

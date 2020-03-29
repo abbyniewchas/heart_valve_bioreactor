@@ -72,6 +72,25 @@ void PID::reset_integral() {
 /*
  * Controller : LQR
  */
+LQR::LQR(std::string id) {
+    // Initialize controller parameters
+    this->id = id;
+    this->num_control = 1;
+    this->num_states = 2;
+
+    // Initialize LQR parameters
+    this->K = new float[this->num_states * this->num_control];
+}
+
+void LQR::tune_controller(float *tuning_values) {
+    // K matrix is defined as a (m x n) matrix where m is the system's states and n is the number of control inputs
+    for (int i = 0; i < (this->num_states * this->num_control); i++) {
+        this->K[i] = tuning_values[i];
+    }
+
+
+}
+
 
 /*
  * State Machine
