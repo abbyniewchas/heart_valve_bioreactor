@@ -56,3 +56,22 @@ xlim([0, time_120(end)]);
 xlabel('Time [s]');
 ylabel('Post-Valve Pressure [mmHg]');
 title('Bioreactor Running at 120 Beats Per Minute');
+
+%% Reaching Equilibrium
+data_eq = load('black_sine1hz_CV_crescendo1.csv');
+data_eq = data_eq - baseline;
+time_eq = ((0:length(data_eq)-1) * 1/data_freq)';
+
+% Draw line at equilibrium value
+eq_line_val = 21.1;
+eq_linex = time_eq;
+eq_liney = ones(length(eq_linex), 1) * eq_line_val;
+
+figure;
+plot(time_eq, data_eq, 'r-o', 'LineWidth', 2);
+hold on
+plot(eq_linex, eq_liney, '--', 'Color', [0 0.5 1], 'LineWidth', 3);
+xlim([0, time_eq(end)]);
+xlabel('Time [s]');
+ylabel('Post-Valve Pressure [mmHg]');
+title('Bioreactor Equilibrates to Pressure Range');
